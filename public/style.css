@@ -2376,3 +2376,90 @@ body.cursor-hover #cursor-trail {
         grid-template-columns: 1fr;
     }
 }
+
+/* ==================== OVERRIDES: BOLD TYPOGRAPHY ==================== */
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@500;600;700&family=Syne:wght@700;800&display=swap');
+
+:root {
+    --font: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-display: 'Archivo Black', 'Syne', sans-serif;
+    --font-bold: 'Archivo Black', 'Syne', sans-serif;
+}
+
+body { font-weight: 600; }
+p, span, a, li, label, input, textarea, select, button { font-weight: 600; }
+h1, h2, h3, h4, h5, h6,
+.hero-title, .section-title, .gradient-text,
+.nav-logo, .logo-text,
+.sidebar-title, .sidebar-section-label,
+.service-card h3, .csc-card h4,
+.stat-number, .marquee span {
+    font-family: var(--font-display) !important;
+    font-weight: 900 !important;
+    letter-spacing: -0.01em;
+}
+.btn, .nav-cta, .service-arrow, .csc-arrow, .tag, .badge { font-weight: 800 !important; letter-spacing: 0.5px; }
+
+/* ==================== SIDEBAR TOGGLE BUTTON ==================== */
+#sidebar-toggle {
+    position: fixed;
+    top: 92px;
+    left: 16px;
+    z-index: 1100;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: var(--gradient);
+    color: #1a1a1a;
+    border: 1px solid var(--accent-2);
+    border-radius: 999px;
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: none;
+    box-shadow: 0 8px 24px rgba(212, 175, 55, 0.35);
+    transition: all var(--transition);
+}
+#sidebar-toggle:hover { transform: translateY(-2px) scale(1.04); }
+#sidebar-toggle .sidebar-toggle-icon-close { display: none; }
+body.sidebar-open #sidebar-toggle .sidebar-toggle-icon-open { display: none; }
+body.sidebar-open #sidebar-toggle .sidebar-toggle-icon-close { display: inline-block; }
+
+/* Sidebar starts collapsed; slides in when body.sidebar-open */
+#services-sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow: 8px 0 32px rgba(0,0,0,0.18);
+}
+body.sidebar-open #services-sidebar { transform: translateX(0); }
+
+/* Body no longer reserves sidebar gutter — sidebar is now an overlay drawer */
+@media (min-width: 1200px) {
+    body { padding-left: 0 !important; }
+    #navbar, #mobile-menu { left: 0 !important; }
+}
+@media (max-width: 1199px) {
+    #services-sidebar { display: block; }
+}
+
+.sidebar-link.featured {
+    background: var(--surface-2);
+    color: var(--accent);
+    border-left: 3px solid var(--accent);
+    padding-left: 13px;
+}
+.sidebar-link.featured:hover {
+    background: linear-gradient(90deg, rgba(212,175,55,0.18), transparent);
+}
+
+/* ==================== HERO 3D LAYER ==================== */
+.hero-3d-scene, #hero-3d {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+.hero-content { position: relative; z-index: 2; }
