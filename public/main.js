@@ -471,3 +471,116 @@
     initThree();
 
 })();
+
+/* ==================== SIDEBAR TOGGLE + HERO 3D ==================== */
+(function () {
+    'use strict';
+
+    // Sidebar open/close
+    document.addEventListener('DOMContentLoaded', function () {
+        var toggle = document.getElementById('sidebar-toggle');
+        var sidebar = document.getElementById('services-sidebar');
+        if (!toggle || !sidebar) return;
+
+        function setOpen(open) {
+            document.body.classList.toggle('sidebar-open', open);
+            toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        }
+        toggle.addEventListener('click', function () {
+            setOpen(!document.body.classList.contains('sidebar-open'));
+        });
+        // Close sidebar when clicking a service link
+        sidebar.querySelectorAll('.sidebar-link').forEach(function (link) {
+            link.addEventListener('click', function () { setOpen(false); });
+        });
+        // Close on Escape
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') setOpen(false);
+        });
+    });
+
+    // Hero 3D rotating wireframe building
+    window.addEventListener('load', function () {
+        if (typeof THREE === 'undefined') return;
+        var mount = document.getElementById('hero-3d');
+        if (!mount) return;
+
+        var w = mount.clientWidth || window.innerWidth;
+        var h = mount.clientHeight || window.innerHeight;
+
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 100);
+        camera.position.set(0, 2, 12);
+
+        var renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setSize(w, h);
+        renderer.setClearColor(0x000000, 0);
+        mount.appendChild(renderer.domElement);
+
+        // A group of stacked gold wireframe blocks forming a building
+        var group = new THREE.Group();
+        var heights = [3.2, 2.4, 1.8, 1.2, 0.7];
+        var yCursor = -2.5;
+        heights.forEach(function (hh, i) {
+            var w0 = 2.6 - i * 0.32;
+            var geo = new THREE.BoxGeometry(w0, hh, w0);
+            var edges = new THREE.EdgesGeometry(geo);
+            var mat = new THREE.LineBasicMaterial({
+                color: i % 2 === 0 ? 0xd4af37 : 0xf5c518,
+                transparent: true,
+                opacity: 0.85
+            });
+            var block = new THREE.LineSegments(edges, mat);
+            block.position.y = yCursor + hh / 2;
+            yCursor += hh + 0.05;
+            group.add(block);
+        });
+
+        // Glowing apex
+        var apex = new THREE.Mesh(
+            new THREE.OctahedronGeometry(0.45, 0),
+            new THREE.MeshBasicMaterial({ color: 0xf5c518, wireframe: true })
+        );
+        apex.position.y = yCursor + 0.6;
+        group.add(apex);
+
+        // Orbiting ring
+        var ring = new THREE.Mesh(
+            new THREE.TorusGeometry(4.5, 0.04, 16, 100),
+            new THREE.MeshBasicMaterial({ color: 0xd4af37, transparent: true, opacity: 0.5 })
+        );
+        ring.rotation.x = Math.PI / 2.2;
+        group.add(ring);
+
+        scene.add(group);
+
+        // Mouse parallax
+        var mx = 0, my = 0;
+        window.addEventListener('mousemove', function (e) {
+            mx = (e.clientX / window.innerWidth - 0.5) * 0.6;
+            my = (e.clientY / window.innerHeight - 0.5) * 0.4;
+        });
+
+        function resize() {
+            var nw = mount.clientWidth || window.innerWidth;
+            var nh = mount.clientHeight || window.innerHeight;
+            camera.aspect = nw / nh;
+            camera.updateProjectionMatrix();
+            renderer.setSize(nw, nh);
+        }
+        window.addEventListener('resize', resize);
+
+        function loop() {
+            group.rotation.y += 0.005;
+            group.rotation.x += (my - group.rotation.x) * 0.04;
+            group.position.x += (mx * 2 - group.position.x) * 0.04;
+            apex.rotation.y += 0.03;
+            apex.rotation.x += 0.02;
+            ring.rotation.z += 0.004;
+            renderer.render(scene, camera);
+            requestAnimationFrame(loop);
+        }
+        loop();
+    });
+})();
