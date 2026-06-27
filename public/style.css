@@ -26,9 +26,9 @@
     --radius-sm: 12px;
     --transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1);
     --transition-slow: 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-    --font: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-display: 'Syne', sans-serif;
-    --font-bold: 'Syne', sans-serif;
+    --font: 'Inter Tight', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-display: 'Syne', 'Inter Tight', sans-serif;
+    --font-bold: 'Syne', 'Inter Tight', sans-serif;
 }
 
 html {
