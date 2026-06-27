@@ -26,9 +26,9 @@
     --radius-sm: 12px;
     --transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1);
     --transition-slow: 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-    --font: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-display: 'Syne', sans-serif;
-    --font-bold: 'Syne', sans-serif;
+    --font: 'Inter Tight', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-display: 'Syne', 'Inter Tight', sans-serif;
+    --font-bold: 'Syne', 'Inter Tight', sans-serif;
 }
 
 html {
@@ -42,8 +42,28 @@ body {
     font-family: var(--font);
     font-size: 16px;
     line-height: 1.6;
+    font-weight: 600;
+    letter-spacing: -0.005em;
     overflow-x: hidden;
     cursor: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+/* Global typography polish — sharper, bolder, tighter */
+h1, h2, h3, h4, h5, h6,
+.hero-title, .section-title, .stat-number, .nav-logo, .btn,
+.sidebar-link, .nav-link, .service-title, .feature-title,
+.card-title, .form-title, .badge {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+h1, .hero-title { font-weight: 800; letter-spacing: -0.035em; }
+strong, b { font-weight: 800; }
+p, li, span, a, label, input, textarea, select, button {
+    font-feature-settings: 'ss01', 'cv11', 'kern';
 }
 
 ::selection {
